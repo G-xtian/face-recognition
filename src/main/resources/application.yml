@@ -1,0 +1,27 @@
+server:
+  #配置服务器端口，不和前端抢占端口
+  port: 9090
+  servlet:
+    #配置后端项目的工程名
+    context-path: /boot
+
+#配置数据源
+spring:
+  application:
+    name: order-boot
+
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/order?serverTimezone=UTC&useUnicode=true&characterEncoding=utf8&useSSL=false
+    username: root
+    password: root
+
+#    mybatis相关配置
+mybatis:
+  #  mybatis给包取别名
+  type-aliases-package: com.sxl.bean
+
+  #mybatis配置mapper.xml <sql> 文件的映射位置   classpath代指resouces
+  mapper-locations: classpath:mappers/*.xml
+  configuration:
+    map-underscore-to-camel-case: true
