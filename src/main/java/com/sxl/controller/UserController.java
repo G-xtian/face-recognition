@@ -1,20 +1,30 @@
 package com.sxl.controller;
 
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.sxl.bean.HttpRequest;
 import com.sxl.bean.ResultDTO;
+import com.sxl.bean.User;
 import com.sxl.bean.WxOpenID;
+import com.sxl.service.impl.UserServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+
+/**
+ * 用户登录调用接口
+ */
 //此注解能将下面定义的类被扫描到spring ioc容器中并且标识此类为控制层
 @RestController
 //通过此注解能让请求访问到具体的controller
 @RequestMapping("/user")
 public class UserController {
+
+    @Autowired
+    UserServiceImpl userService;
+
 
     /*
     * 向微信接口发送get请求，请求个人信息openid等
@@ -36,12 +46,18 @@ public class UserController {
             return ResultDTO.success(wxOpenID);
         }
     }
-
-    @GetMapping("/text")
-    public String text(){
-//        Request({
-//
-//        })
-        return "dfasdf ";
+    /**
+     * 获取用户数据的接口
+     * openid 微信id
+     * */
+    @GetMapping("/info")
+    public ResultDTO getUserInfo(String openid){
+        User user = userService.getUserInfo(openid);
+        //判断是否为空
+        if (user != null){
+            return ResultDTO.success(user);
+        }else {
+            return ResultDTO.error("查询不到该用户");
+        }
     }
 }
